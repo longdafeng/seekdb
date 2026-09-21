@@ -71,7 +71,10 @@ if(ANDROID)
 else()
   target_link_directories(oblib_lib PUBLIC
     ${DEP_DIR}/lib ${DEP_DIR}/lib/vsag_lib)
-  if(UNIX)
+  if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    # Apple Clang accepts OpenMP in its frontend; the iOS runtime is linked separately.
+    target_compile_options(oblib_lib PUBLIC "SHELL:-Xpreprocessor -fopenmp")
+  elseif(UNIX)
     target_compile_options(oblib_lib PUBLIC -fopenmp)
   endif()
 
